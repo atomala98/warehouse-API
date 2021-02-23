@@ -6,12 +6,12 @@ from datetime import timedelta
 
 # Create your models here.
 class Item(models.Model):
-    name = models.CharField(max_length=30, unique=True)
+    name = models.CharField(max_length=30)
     stock = models.IntegerField(default=0)
     location = models.CharField(max_length=5)
-    image = models.CharField(max_length=120, unique=True)
+    image = models.CharField(max_length=120)
     description = models.CharField(max_length=200)
-    code = models.IntegerField(unique=True)
+    code = models.IntegerField()
     color = models.CharField(max_length=20)
     
 

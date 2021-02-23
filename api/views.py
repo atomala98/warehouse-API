@@ -40,7 +40,7 @@ class SingleItemDelivery(APIView):
                 item.save(update_fields=['stock'])
                 return Response(ItemSerializer(item).data, status=status.HTTP_200_OK)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(request.data, status=status.HTTP_404_NOT_FOUND)
 
 
 class AddItem(APIView):

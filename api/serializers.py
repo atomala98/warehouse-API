@@ -7,8 +7,6 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'stock', 'location', 'image', 'description', 'code', 'color')
         
 class UpdateStockSerializer(serializers.ModelSerializer):
-    code = serializers.CharField(validators=[])
-    
     class Meta:
         model = Item
         fields = ('stock', 'code')
@@ -16,4 +14,4 @@ class UpdateStockSerializer(serializers.ModelSerializer):
 class CreateItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ('id', 'name', 'stock', 'location', 'image', 'description', 'code', 'color')
+        fields = ('id', 'name', 'location', 'image', 'description', 'code', 'color')
