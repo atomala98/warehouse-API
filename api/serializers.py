@@ -15,3 +15,8 @@ class CreateItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ('id', 'name', 'location', 'image', 'description', 'code', 'color')
+        
+class DeleteItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ('code', )

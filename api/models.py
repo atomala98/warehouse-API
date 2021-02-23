@@ -15,12 +15,3 @@ class Item(models.Model):
     color = models.CharField(max_length=20)
     
 
-class UncompletedOrder(models.Model):
-    items = models.ManyToManyField(Item, through='OrderDetails')
-    deadline = models.DateTimeField(default=timezone.now() + timedelta(days = 3))
-    
-    
-class OrderDetails(models.Model):
-    order = models.ForeignKey(UncompletedOrder, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    amount = models.IntegerField()

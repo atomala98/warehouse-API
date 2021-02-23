@@ -72,3 +72,18 @@ class AddItem(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)  
         return Response(status=status.HTTP_404_NOT_FOUND)  
     
+    
+class DeleteItem(APIView):
+    serializer_class = DeleteItemSerializer
+
+    def delete(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            code = serializer.data.get('code')
+            item = Item.objects.filter(code=code)
+            if item:
+                item.delete()
+                return Response({}, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_404_NOT_FOUND)    
+    
