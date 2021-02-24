@@ -23,4 +23,4 @@ class Order(models.Model):
 class Details(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    amount = models.IntegerField()
+    amount = models.IntegerField(default=1)

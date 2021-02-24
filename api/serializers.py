@@ -20,3 +20,4 @@ class ItemCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ('code', )
+        
