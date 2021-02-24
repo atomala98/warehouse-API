@@ -5,9 +5,6 @@ from rest_framework.views import APIView
 from rest_framework import generics, status
 
 # Create your views here.
-def home(request):
-    html = "<html><body>Home</body></html>"
-    return HttpResponse(html)
 
 class ItemView(generics.ListAPIView):
     queryset = Item.objects.all()
@@ -74,7 +71,7 @@ class AddItem(APIView):
     
     
 class DeleteItem(APIView):
-    serializer_class = DeleteItemSerializer
+    serializer_class = ItemCodeSerializer
 
     def delete(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
