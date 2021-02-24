@@ -39,13 +39,15 @@ class AddToOrder(APIView):
     
     def patch(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
+        print(Details.objects.first().item.code)
         if serializer.is_valid():
             number = serializer.data.get('number')
             code = serializer.data.get('code')
+            amount = serializer.data.get('amount')
             order = Order.objects.filter(number=number).first()
             item = Item.objects.filter(code=code).first()
             if order and item:
-                detail = Details(order=order, item=item)
+                detail = Details(order=order, item=item, amount=amount)
                 detail.save()
                 return Response({}, status=status.HTTP_200_OK)
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)

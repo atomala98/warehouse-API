@@ -2,6 +2,14 @@ from rest_framework import serializers
 from .models import *
 from api.serializers import ItemSerializer
 
+# class OrderItemSerializer(serializers.ModelSerializer):
+#     item = ItemSerializer(read_only=True, many=True)
+    
+#     class Meta:
+#         model = Details
+#         fields = ('item', 'amount')
+# Serializers to fix
+
 class OrderSerializer(serializers.ModelSerializer):
     items = ItemSerializer(read_only=True, many=True)
     
@@ -18,7 +26,8 @@ class OrderIDSerializer(serializers.ModelSerializer):
 
 class AddToOrderSerializer(serializers.ModelSerializer):
     code = serializers.IntegerField()
+    amount = serializers.IntegerField()
     
     class Meta:
         model = Order
-        fields = ('number', 'code')
+        fields = ('number', 'code', 'amount')
