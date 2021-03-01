@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import OrdersView, CreateOrder, FinishOrder, AddToOrder
+from .views import OrdersView, CreateOrder, FinishOrder, AddToOrder, DetailsView
 
 
 urlpatterns = [
@@ -8,4 +8,5 @@ urlpatterns = [
     path('create', CreateOrder.as_view()),
     path('finish', FinishOrder.as_view()),
     path('add-to', AddToOrder.as_view()),
+    path('details', DetailsView.as_view()),
 ]

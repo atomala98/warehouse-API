@@ -6,6 +6,11 @@ from .serializers import *
 from .models import *
 # Create your views here.
 
+class DetailsView(generics.ListAPIView):
+    queryset = Details.objects.all()
+    serializer_class = DetailsSerializer
+    
+
 class OrdersView(generics.ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -39,7 +44,6 @@ class AddToOrder(APIView):
     
     def patch(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
-        print(Details.objects.first().item.code)
         if serializer.is_valid():
             number = serializer.data.get('number')
             code = serializer.data.get('code')
