@@ -77,12 +77,13 @@ class CheckItem(APIView):
             amount_to_check = serializer.data.get('amount_to_check')
             order = Order.objects.filter(number=number).first()
             item = Item.objects.filter(code=code).first()
-            print(amount_to_check)
+            print(amount_to_check, order.number, item.code)
             if order and item:
                 if item not in order.items.all():
                     return Response({"Message": "Item not in order"}, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    detail = Details.objects.filter(Q(item=item)|Q(order=order)).first()
+                    detail = Details.objects.filter(Q(item=item)&Q(order=order)).first()
+                    print(detail.order.number)
                     if detail.amount < detail.amount_to_check + amount_to_check:
                         return Response({"Message": "Too many items."}, status=status.HTTP_400_BAD_REQUEST)
                     else:
@@ -94,3 +95,25 @@ class CheckItem(APIView):
                             return Response({"Message": f"{amount_to_check} items collected."}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"Message": "Invalid data."}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"Message": "Invalid data."}, status=status.HTTP_404_NOT_FOUND)
+    
+    
+class CompleteCollection(APIView):
+    serializer_class = OrderIDSerializer
+    
+    def patch(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            number = serializer.data.get('number')
+            order = Order.objects.filter(number=number).first()
+            if order:
+                details = Details.objects.filter(order=order)
+                for detail in details:
+                    if detail.amount_to_check != detail.amount:
+                        return Response({"Message": "Collecting not completed!"})
+                for detail in details:
+                    detail.amount_to_check = 0
+                    detail.save(update_fields=['amount_to_check'])
+                order.status = 'Collected'
+                order.save(update_fields=['status'])
+                return Response({"Message": f"Order {number} collecting completed."})
+        return Response({"Message": "Something went wrong."}, status=status.HTTP_400_BAD_REQUEST)
