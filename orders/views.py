@@ -105,7 +105,7 @@ class CompleteCollection(APIView):
         if serializer.is_valid():
             number = serializer.data.get('number')
             order = Order.objects.filter(number=number).first()
-            if order:
+            if order and order.status == "Started":
                 details = Details.objects.filter(order=order)
                 for detail in details:
                     if detail.amount_to_check != detail.amount:
@@ -117,3 +117,40 @@ class CompleteCollection(APIView):
                 order.save(update_fields=['status'])
                 return Response({"Message": f"Order {number} collecting completed."})
         return Response({"Message": "Something went wrong."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class CompleteVerification(APIView):
+    serializer_class = OrderIDSerializer
+    
+    def patch(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            number = serializer.data.get('number')
+            order = Order.objects.filter(number=number).first()
+            if order and order.status == "Collected":
+                details = Details.objects.filter(order=order)
+                for detail in details:
+                    if detail.amount_to_check != detail.amount:
+                        return Response({"Message": "Collecting not completed!"})
+                for detail in details:
+                    detail.amount_to_check = 0
+                    detail.save(update_fields=['amount_to_check'])
+                order.status = 'Verified'
+                order.save(update_fields=['status'])
+                return Response({"Message": f"Order {number} collecting completed."})
+        return Response({"Message": "Something went wrong."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class OrderShipped:
+    serializer_class = OrderIDSerializer
+    
+    def patch(self, request, format=None):
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                number = serializer.data.get('number')
+                order = Order.objects.filter(number=number).first()
+                if order and order.status == "Verified":
+                    order.status = 'Shipped'
+                    order.save(update_fields=['status'])
+                    return Response({"Message": f"Order {number} collecting completed."})
+            return Response({"Message": "Something went wrong."}, status=status.HTTP_400_BAD_REQUEST)

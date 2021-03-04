@@ -20,6 +20,7 @@ class Order(models.Model):
     items = models.ManyToManyField(Item,
         through='Details')
     
+    
 class Details(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

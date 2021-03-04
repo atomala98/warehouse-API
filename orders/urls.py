@@ -11,4 +11,5 @@ urlpatterns = [
     path('details', DetailsView.as_view()),
     path('check-item', CheckItem.as_view()),
     path('complete', CompleteCollection.as_view()),
+    path('verify', CompleteVerification.as_view()),
 ]
