@@ -7,7 +7,7 @@ class DetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Details
-        fields = ('item', 'amount')
+        fields = ('item', 'amount_to_check', 'amount')
 
 
 class OrderSerializer(serializers.ModelSerializer):

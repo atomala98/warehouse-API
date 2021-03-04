@@ -61,6 +61,6 @@ class AddToOrder(APIView):
                     detail = Details.objects.filter(Q(item=item)|Q(order=order)).first()
                     detail.amount += amount
                     detail.save({})
-                    return Response('Item already here', status=status.HTTP_400_BAD_REQUEST)
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status=status.HTTP_404_NOT_FOUND)
