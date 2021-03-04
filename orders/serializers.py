@@ -31,3 +31,12 @@ class AddToOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('number', 'code', 'amount')
+        
+        
+class CheckItemSerializer(serializers.ModelSerializer):
+    number = serializers.IntegerField()
+    code = serializers.IntegerField()
+
+    class Meta:
+        model = Details
+        fields = ('number', 'code', 'amount_to_check')
