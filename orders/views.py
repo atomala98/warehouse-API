@@ -11,11 +11,16 @@ class DetailsView(generics.ListAPIView):
     queryset = Details.objects.all()
     serializer_class = DetailsSerializer
     
-
+    
 class OrdersView(generics.ListAPIView):
-    queryset = Order.objects.all()
     serializer_class = OrderSerializer
     
+    def get_queryset(self):
+        status = self.request.query_params.get('status', None)
+        if status:
+            return Order.objects.filter(status=status)
+        return Order.objects.all()
+
     
 class CreateOrder(APIView):
     
@@ -145,12 +150,12 @@ class OrderShipped:
     serializer_class = OrderIDSerializer
     
     def patch(self, request, format=None):
-            serializer = self.serializer_class(data=request.data)
-            if serializer.is_valid():
-                number = serializer.data.get('number')
-                order = Order.objects.filter(number=number).first()
-                if order and order.status == "Verified":
-                    order.status = 'Shipped'
-                    order.save(update_fields=['status'])
-                    return Response({"Message": f"Order {number} collecting completed."})
-            return Response({"Message": "Something went wrong."}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            number = serializer.data.get('number')
+            order = Order.objects.filter(number=number).first()
+            if order and order.status == "Verified":
+                order.status = 'Shipped'
+                order.save(update_fields=['status'])
+                return Response({"Message": f"Order {number} collecting completed."})
+        return Response({"Message": "Something went wrong."}, status=status.HTTP_400_BAD_REQUEST)
