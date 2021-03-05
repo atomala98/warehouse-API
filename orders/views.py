@@ -16,9 +16,12 @@ class OrdersView(generics.ListAPIView):
     serializer_class = OrderSerializer
     
     def get_queryset(self):
+        code = self.request.query_params.get('code', None)
         status = self.request.query_params.get('status', None)
         if status:
             return Order.objects.filter(status=status)
+        if code:
+            return Order.objects.filter(code=code)
         return Order.objects.all()
 
     
